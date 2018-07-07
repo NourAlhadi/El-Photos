@@ -46,5 +46,5 @@ application/logs/*
 
 #Nour Defined
 #---------------------------
-/assets/
-/assets/*
+/uploads/
+/uploads/*

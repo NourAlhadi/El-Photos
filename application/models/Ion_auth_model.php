@@ -931,6 +931,18 @@ class Ion_auth_model extends CI_Model
 		return FALSE;
 	}
 
+    /**
+     * Change User Avatar
+     *
+     * @param integer $id
+     * @param string $avatar
+     */
+	public function change_avatar($id, $avatar){
+        $this->db->set('avatar', "'". $avatar . "'",false);
+        $this->db->where('id',$id);
+        $this->db->update('users');
+    }
+
 	/**
 	 * Register
 	 *
@@ -984,6 +996,7 @@ class Ion_auth_model extends CI_Model
 			'email' => $email,
 			'ip_address' => $ip_address,
 			'created_on' => time(),
+			'avatar'=>"",
 			'active' => ($manual_activation === FALSE ? 1 : 0)
 		);
 

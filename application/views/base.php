@@ -43,7 +43,7 @@
             background: #e3e3e3;
         }
         .form-style-6 h1{
-            background: #212529;
+            background: #DE6600;
             padding: 20px 0;
             font-size: 140%;
             font-weight: 300;
@@ -91,9 +91,9 @@
         .form-style-6 textarea:focus,
         .form-style-6 select:focus
         {
-            box-shadow: 0 0 5px #212529;
+            box-shadow: 0 0 5px #DE6600;
             padding: 3%;
-            border: 1px solid #212529;
+            border: 1px solid #DE6600;
         }
 
         .form-style-6 input[type="submit"],
@@ -103,8 +103,8 @@
             -moz-box-sizing: border-box;
             width: 100%;
             padding: 3%;
-            background: #212529;
-            border-bottom: 2px solid #212529;
+            background: #DE6600;
+            border-bottom: 2px solid #DE6600;
             border-top-style: none;
             border-right-style: none;
             border-left-style: none;
@@ -112,7 +112,7 @@
         }
         .form-style-6 input[type="submit"]:hover,
         .form-style-6 input[type="button"]:hover{
-            background: #212529;
+            background: #DE6600;
             color: #fff;
         }
         .form-style-6 a:hover{
@@ -126,10 +126,10 @@
 <div class="jumbotron text-center main-top" style="margin-bottom:0">
     <div id="main-image"></div>
     <h1>El-Photos By Nour Alhadi</h1>
-    <p>Make your photos charm!!</p>
+    <h4>Make your photos charm!!</h4>
 </div>
 
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
+<nav class="navbar navbar-expand-sm bg-warning navbar-light sticky-top">
     <a class="navbar-brand" href="<?php echo base_url("") ?>">El-Photos</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
@@ -172,7 +172,7 @@
     <?=$body?>
 </div>
 
-<div class="jumbotron text-center" style="margin-bottom:0">
+<div class="jumbotron text-center" style="margin-bottom:0; background-color: #ffc107">
     <p>All right reserved &copy; 2018 - Nour Alhadi Mahmoud</p>
 </div>
 
