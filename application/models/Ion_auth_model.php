@@ -357,6 +357,19 @@ class Ion_auth_model extends CI_Model
 		}
 	}
 
+    /**
+     * Check if Username Already Taken
+     *
+     */
+    public function check_unique_username($username){
+        $this->db->where('username',$this->input->post('username'));
+        $query_username = $this->db->get('users');
+        if($query_username->num_rows() == 1){
+            return false;
+        }
+        return true;
+    }
+
 	/**
 	 * Generates a random salt value for forgotten passwords or any other keys. Uses SHA1.
 	 *

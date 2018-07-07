@@ -47,7 +47,10 @@ class Auth extends CI_Controller
 				$this->data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
 			}
 
-			$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'index', $this->data);
+            $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+            $data["user_logged_in"] = $this->user_logged_in;
+            $data['body'] = $this->load->view('auth' . DIRECTORY_SEPARATOR . 'index', $this->data, true);
+            $this->load->view('base',$data);
 		}
 	}
 
@@ -99,7 +102,10 @@ class Auth extends CI_Controller
 				'type' => 'password',
 			);
 
-			$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'login', $this->data);
+            $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+            $data["user_logged_in"] = $this->user_logged_in;
+            $data['body'] = $this->load->view('auth' . DIRECTORY_SEPARATOR . 'login', $this->data, true);
+            $this->load->view('base',$data);
 		}
 	}
 
@@ -115,7 +121,7 @@ class Auth extends CI_Controller
 
 		// redirect them to the login page
 		$this->session->set_flashdata('message', $this->ion_auth->messages());
-		redirect('auth/login', 'refresh');
+		redirect('/', 'refresh');
 	}
 
 	/**
@@ -166,7 +172,10 @@ class Auth extends CI_Controller
 			);
 
 			// render
-			$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'change_password', $this->data);
+            $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+            $data["user_logged_in"] = $this->user_logged_in;
+            $data['body'] = $this->load->view('auth' . DIRECTORY_SEPARATOR . 'change_password', $this->data, true);
+            $this->load->view('base',$data);
 		}
 		else
 		{
@@ -223,7 +232,11 @@ class Auth extends CI_Controller
 
 			// set any errors and display the form
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
-			$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'forgot_password', $this->data);
+
+            $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+            $data["user_logged_in"] = $this->user_logged_in;
+            $data['body'] = $this->load->view('auth' . DIRECTORY_SEPARATOR . 'forgot_password', $this->data, true);
+            $this->load->view('base',$data);
 		}
 		else
 		{
@@ -314,7 +327,10 @@ class Auth extends CI_Controller
 				$this->data['code'] = $code;
 
 				// render
-				$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'reset_password', $this->data);
+                $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+                $data["user_logged_in"] = $this->user_logged_in;
+                $data['body'] = $this->load->view('auth' . DIRECTORY_SEPARATOR . 'reset_password', $this->data, true);
+                $this->load->view('base',$data);
 			}
 			else
 			{
@@ -413,7 +429,10 @@ class Auth extends CI_Controller
 			$this->data['csrf'] = $this->_get_csrf_nonce();
 			$this->data['user'] = $this->ion_auth->user($id)->row();
 
-			$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'deactivate_user', $this->data);
+            $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+            $data["user_logged_in"] = $this->user_logged_in;
+            $data['body'] = $this->load->view('auth' . DIRECTORY_SEPARATOR . 'deactivate_user', $this->data, true);
+            $this->load->view('base',$data);
 		}
 		else
 		{
@@ -546,7 +565,10 @@ class Auth extends CI_Controller
 				'value' => $this->form_validation->set_value('password_confirm'),
 			);
 
-			$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'create_user', $this->data);
+            $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+            $data["user_logged_in"] = $this->user_logged_in;
+            $data['body'] = $this->load->view('auth' . DIRECTORY_SEPARATOR . 'create_user', $this->data, true);
+            $this->load->view('base',$data);
 		}
 	}
 	/**
@@ -697,7 +719,10 @@ class Auth extends CI_Controller
 			'type' => 'password'
 		);
 
-		$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'edit_user', $this->data);
+        $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+        $data["user_logged_in"] = $this->user_logged_in;
+        $data['body'] = $this->load->view('auth' . DIRECTORY_SEPARATOR . 'edit_user', $this->data, true);
+        $this->load->view('base',$data);
 	}
 
 	/**
@@ -745,7 +770,10 @@ class Auth extends CI_Controller
 				'value' => $this->form_validation->set_value('description'),
 			);
 
-			$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'create_group', $this->data);
+            $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+            $data["user_logged_in"] = $this->user_logged_in;
+            $data['body'] = $this->load->view('auth' . DIRECTORY_SEPARATOR . 'create_group', $this->data, true);
+            $this->load->view('base',$data);
 		}
 	}
 
@@ -814,7 +842,10 @@ class Auth extends CI_Controller
 			'value' => $this->form_validation->set_value('group_description', $group->description),
 		);
 
-		$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'edit_group', $this->data);
+        $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+        $data["user_logged_in"] = $this->user_logged_in;
+        $data['body'] = $this->load->view('auth' . DIRECTORY_SEPARATOR . 'edit_group', $this->data, true);
+        $this->load->view('base',$data);
 	}
 
 	/**
@@ -842,25 +873,6 @@ class Auth extends CI_Controller
 			return FALSE;
 	}
 
-	/**
-	 * @param string     $view
-	 * @param array|null $data
-	 * @param bool       $returnhtml
-	 *
-	 * @return mixed
-	 */
-	public function _render_page($view, $data = NULL, $returnhtml = FALSE)//I think this makes more sense
-	{
 
-		$this->viewdata = (empty($data)) ? $this->data : $data;
-
-		$view_html = $this->load->view($view, $this->viewdata, $returnhtml);
-
-		// This will return html on 3rd argument being true
-		if ($returnhtml)
-		{
-			return $view_html;
-		}
-	}
 
 }
