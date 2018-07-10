@@ -6,16 +6,73 @@ class Profile extends CI_Controller {
         $this->user_logged_in = (bool)$this->ion_auth->logged_in();
         $data["user_logged_in"] = $this->user_logged_in;
         if (!$this->user_logged_in){
-            show_404();
-            return;
+            redirect('auth/login');
         }
         $data['user'] = $this->ion_auth->user()->row();
         $data['body'] = $this->load->view('profile', $data, true);
         $this->load->view('base',$data);
     }
 
+
+    public function user($id){
+        $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+        $data["user_logged_in"] = $this->user_logged_in;
+        $data['user'] = $this->ion_auth->user()->row();
+        if ($data['user']->id == $id){
+            if (! $data['user_logged_in'] ){
+                redirect('auth/login');
+            }else{
+                redirect('profile');
+            }
+        }
+
+
+        $request = $this->ion_auth->user($id)->row();
+        if (is_null($request)){
+            redirect("/");
+        }
+
+        $check = $this->relation_model->check_friends($data['user']->id, $request->id);
+        $data['friend'] = $check;
+
+        $data['user'] = $request;
+
+        $data['strange'] = true;
+        $data['body'] = $this->load->view('profile', $data, true);
+        $this->load->view('base',$data);
+    }
+
+    public function add($user_id){
+        $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+        $data["user_logged_in"] = $this->user_logged_in;
+        if (!$this->user_logged_in){
+            redirect('auth/login');
+        }
+        $me = $this->ion_auth->user()->row()->id;
+        $this->relation_model->follow($me,$user_id);
+        redirect("profile/user/".$user_id);
+    }
+
+    public function remove($user_id){
+        $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+        $data["user_logged_in"] = $this->user_logged_in;
+        if (!$this->user_logged_in){
+            redirect('auth/login');
+        }
+        $me = $this->ion_auth->user()->row()->id;
+        $this->relation_model->unfollow($me,$user_id);
+        redirect("profile/user/".$user_id);
+    }
+
     public function change_avatar(){
-        $config['upload_path']          = './uploads/';
+        $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+        $data["user_logged_in"] = $this->user_logged_in;
+        if (!$this->user_logged_in){
+            redirect('auth/login');
+        }
+
+
+        $config['upload_path']          = './uploads/avatars/';
         $config['allowed_types']        = 'gif|jpg|png';
         $config['max_size']             = 2048;
         $config['max_width']            = 2028;
@@ -26,7 +83,6 @@ class Profile extends CI_Controller {
 
         if ( ! $this->upload->do_upload('userfile')) {
             $error = array('error' => $this->upload->display_errors());
-            var_dump($error);
 
             $this->user_logged_in = (bool)$this->ion_auth->logged_in();
             $data["user_logged_in"] = $this->user_logged_in;
@@ -46,6 +102,12 @@ class Profile extends CI_Controller {
     }
 
     public function remove_avatar(){
+        $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+        $data["user_logged_in"] = $this->user_logged_in;
+        if (!$this->user_logged_in){
+            redirect('auth/login');
+        }
+
         $user = $this->ion_auth->user()->row();
         $id = $user->id;
 
@@ -55,10 +117,15 @@ class Profile extends CI_Controller {
     }
 
     public function change() {
+        $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+        $data["user_logged_in"] = $this->user_logged_in;
+        if (!$this->user_logged_in){
+            redirect('auth/login');
+        }
+
         $user = $this->ion_auth->user()->row();
         $this->data['user'] = $user;
 
-        $this->load->library('form_validation');
         $this->form_validation->set_rules('first_name', 'First name', 'trim');
         $this->form_validation->set_rules('last_name', 'Last name', 'trim');
         $this->form_validation->set_rules('company', 'Company', 'trim');

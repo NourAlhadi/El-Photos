@@ -17,7 +17,7 @@ CREATE TABLE `groups` (
 
 INSERT INTO `groups` (`id`, `name`, `description`) VALUES
      (1,'admin','Administrator'),
-     (2,'members','General User');
+     (2,'Users','General User');
 
 
 
@@ -32,6 +32,7 @@ CREATE TABLE `users` (
   `ip_address` varchar(45) NOT NULL,
   `username` varchar(100) NULL,
   `password` varchar(255) NOT NULL,
+  `avatar` varchar(100) NULL,
   `salt` varchar(255) DEFAULT NULL,
   `email` varchar(254) NOT NULL,
   `activation_code` varchar(40) DEFAULT NULL,
@@ -93,3 +94,30 @@ CREATE TABLE `login_attempts` (
   `time` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `photo`;
+#
+# Table structure for table 'photo'
+#
+CREATE TABLE `photo` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `post` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `date` DATETIME NOT NULL,
+  `link` VARCHAR(255) NOT NULL,
+  `uploader` INT NOT NULL,
+  `uploader_name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `views` INT NOT NULL DEFAULT '0',
+  `loves` INT NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
+
+
+DROP TABLE IF EXISTS `follow`;
+#
+# Table structure for table 'follow'
+#
+CREATE TABLE `follow` (
+  `me` int(11) unsigned NOT NULL,
+  `him` int(11) unsigned NOT NULL,
+) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;

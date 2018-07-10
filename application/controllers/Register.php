@@ -7,7 +7,6 @@ class Register extends CI_Controller
     public function index()
     {
         $this->load->helper('form');
-        $this->load->library('form_validation');
 
         $this->form_validation->set_rules('first_name', 'First name','trim|required');
         $this->form_validation->set_rules('last_name', 'Last name','trim|required');
@@ -38,7 +37,6 @@ class Register extends CI_Controller
 
 
 
-            $this->load->library('ion_auth');
             if($this->ion_auth->check_unique_username($username) && $this->ion_auth->register($username,$password,$email,$additional_data, array()))
             {
                 $_SESSION['auth_message'] = 'The account has been created. You may now login.';

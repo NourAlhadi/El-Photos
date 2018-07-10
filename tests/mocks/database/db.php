@@ -90,7 +90,7 @@ class Mock_Database_DB {
 	}
 
 	/**
-	 * Main DB method wrapper
+	 * Photos DB method wrapper
 	 *
 	 * @param 	string	Group or DSN string
 	 * @param 	bool

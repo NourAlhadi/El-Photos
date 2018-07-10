@@ -3,6 +3,7 @@ CREATE TABLE users (
     ip_address varchar(45) NOT NULL,
     username varchar(100) NULL,
     password varchar(255) NOT NULL,
+    avatar varchar (100) NULL,
     salt varchar(255),
     email varchar(254) NOT NULL,
     activation_code varchar(40),
@@ -45,7 +46,7 @@ CREATE TABLE users_groups (
 
 SET IDENTITY_INSERT groups ON;
 INSERT INTO groups (id, name, description) VALUES (1,'admin','Administrator');
-INSERT INTO groups (id, name, description) VALUES (2,'members','General User');
+INSERT INTO groups (id, name, description) VALUES (2,'Users','General User');
 SET IDENTITY_INSERT groups OFF;
 
 SET IDENTITY_INSERT users ON;
@@ -65,4 +66,17 @@ CREATE TABLE login_attempts (
 	time int,
   PRIMARY KEY(id),
   CONSTRAINT login_attempts_check_id CHECK(id >= 0)
+);
+
+--
+-- Table structure for table 'photo'
+--
+CREATE TABLE photo (
+  [id] int check ([id] > 0) NOT NULL IDENTITY,
+  [post] VARCHAR(max) NOT NULL,
+  [link] VARCHAR(255) NOT NULL,
+  [uploader] INT NOT NULL,
+  [views] INT NOT NULL DEFAULT '0',
+  [loves] INT NOT NULL DEFAULT '0',
+  PRIMARY KEY ([id])
 );

@@ -4,17 +4,18 @@
     <title>El-Photo || Make Your Photos Charm!!</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="<?php echo base_url()?>assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="<?php echo base_url()?>assets/css/bootstrap.css">
     <script src="<?php echo base_url()?>assets/js/jquery.js"></script>
     <script src="<?php echo base_url()?>assets/js/popper.min.js"></script>
     <script src="<?php echo base_url()?>assets/js/bootstrap.js"></script>
     <style>
-        .fakeimg {
-            height: 200px;
-            background: #aaa;
+        .wrapper {
+            min-height: calc(100vh - 50px);
         }
-
-
+        .footer {
+            height: 50px;
+        }
 
         .main-top {
             position: relative;
@@ -137,13 +138,13 @@
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link <?php if (isset($tact)) echo $tact ?>" href="<?php echo base_url("") ?>">Trends</a>
+                <a class="nav-link <?php if (isset($tact)) echo "active" ?>" href="<?php echo base_url("") ?>">Trends</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <?php if (isset($mact)) echo $mact ?>" href="#">By Me</a>
+                <a class="nav-link <?php if (isset($mact)) echo "active" ?>" href="#">By Community</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <?php if (isset($uact)) echo $uact ?>" href="#">Upload</a>
+                <a class="nav-link <?php if (isset($uact)) echo "active" ?>" href="<?php echo base_url(); ?>photos/upload">Upload</a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -168,13 +169,15 @@
     </div>
 </nav>
 
-<div class="container" style="margin-top:30px">
-    <?=$body?>
-</div>
+<div class="inside">
+    <div class="container wrapper" style="margin-top:30px">
+        <?=$body?>
+        <div class="push"></div>
+    </div>
 
-<div class="jumbotron text-center" style="margin-bottom:0; background-color: #ffc107">
-    <p>All right reserved &copy; 2018 - Nour Alhadi Mahmoud</p>
+    <div class="jumbotron text-center footer" style="margin-bottom:0; background-color: #ffc107">
+        <p>All right reserved &copy; 2018 - Nour Alhadi Mahmoud</p>
+    </div>
 </div>
-
 </body>
 </html>
