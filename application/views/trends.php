@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row">
         <?php foreach ($photos as $photo): ?>
-            <div onclick="openModal(<?php echo $photo->id; ?>);" class="col-12 col-sm-6 col-lg-4" style="margin-bottom: 20px">
+            <div id="photo<?php echo $photo->id; ?>" onclick="openModal(<?php echo $photo->id; ?>);" class="col-12 col-sm-6 col-lg-4" style="margin-bottom: 20px">
                 <div class="card text-center">
                     <!-- Heading -->
                     <div class="card-body">
@@ -15,9 +15,12 @@
                     <!-- Text Content -->
                     <div class="card-body">
                         <p class="card-text"><?php echo $photo->post ?></p>
-                        <i class=" fa fa-2x fa fa-eye" style="color: royalblue"> <?php echo $photo->views; ?></i> &nbsp;&nbsp;
-                        <i class=" fa fa-2x fa-heart" style="color: indianred"> <?php echo $photo->loves; ?></i> &nbsp;&nbsp;
-                        <br /><br /><button class="btn btn-danger">Love it!!</button>
+                        <i id="views_<?php echo $photo->id; ?>" class="fa fa-2x fa fa-eye" style="color: royalblue"> <?php echo $photo->views; ?></i> &nbsp;&nbsp;
+                        <i id="loves_<?php echo $photo->id; ?>" class="fa fa-2x fa-heart" style="color: indianred"> <?php echo $photo->loves; ?></i> &nbsp;&nbsp;
+                        <br /><br />
+                        <?php if($user_logged_in): ?>
+                            <button onclick="addLove(<?php echo $photo->id . ',' . $user->id;?>)" class="btn btn-danger">Love it!!</button>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -31,9 +34,11 @@
                     </div>
                     <div class="caption-container">
                         <p id="caption"><?php echo $photo->post; ?></p>
-                        <i class=" fa fa-eye" style="color: royalblue"> <?php echo $photo->views; ?></i> &nbsp;&nbsp;
-                        <i class=" fa fa-heart" style="color: indianred"> <?php echo $photo->loves; ?></i> &nbsp;&nbsp;
-                        <button class="btn btn-sm btn-small btn-danger">Love it!!</button>
+                        <i id="modal_views_<?php echo $photo->id; ?>" class="fa fa-eye" style="color: royalblue"> <?php echo $photo->views; ?></i> &nbsp;&nbsp;
+                        <i id="modal_loves_<?php echo $photo->id; ?>" class="fa fa-heart" style="color: indianred"> <?php echo $photo->loves; ?></i> &nbsp;&nbsp;
+                        <?php if($user_logged_in): ?>
+                            <button onclick="addLove(<?php echo $photo->id . ',' . $user->id;?>)" class="btn btn-sm btn-samll btn-danger">Love it!!</button>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -43,7 +48,19 @@
 </div>
 
 
+<div id="hides" class="alert alert-danger">
+    You Already Loved this photo!!
+</div>
+
 <style>
+
+    #hides{
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
     /* The Modal (background) */
     .modal {
         display: none;
@@ -126,19 +143,81 @@
 </style>
 
 <script>
+
+    let lock = false;
+
     function openModal(n) {
+        if (lock){
+            lock = false;
+            return;
+        }
         document.getElementById('myModal' + n).style.display = "block";
-        showSlides(n);
+        addView(n);
+        incViews(n);
     }
+
 
     function closeModal(n) {
         document.getElementById('myModal' + n).style.display = "none";
     }
 
-    function showSlides(n) {
-        let slides = document.getElementById("mySlides"+n);
-        slides[slideIndex-1].style.display = "block";
+
+    function addView(idx) {
+        jQuery.ajax({
+            type: "POST",
+            url: "<?php echo base_url(); ?>/ajax/add_view",
+            dataType: 'json',
+            data: {photo_id: idx},
+            success: function(res) {
+                console.log("Added");
+            }
+        });
+    }
+
+    function incViews(idx){
+        let x = document.getElementById('views_' + idx).innerText;
+        x++;
+        document.getElementById('views_' + idx).innerText = x;
+        document.getElementById('modal_views_' + idx).innerText = x;
+    }
+
+    function showNoLove(){
+        let $div2 = $("#hides");
+        if ($div2.is(":visible")) { return; }
+        $div2.show();
+        setTimeout(function() {
+            $div2.hide();
+        }, 5000);
+    }
+
+    function addLove(idx,user) {
+        lock = true;
+        jQuery.ajax({
+            type: "POST",
+            url: "<?php echo base_url(); ?>/ajax/add_love",
+            dataType: 'json',
+            data: {photo_id: idx, user_id: user},
+            success: function(res) {
+                console.log(res.status);
+                if (res.status === "success"){
+                    incLoves(idx);
+                }else{
+                    showNoLove();
+                }
+            }
+
+        });
+    }
+
+    function incLoves(idx){
+        let x = document.getElementById('loves_' + idx).innerText;
+        x++;
+        document.getElementById('loves_' + idx).innerText = x;
+        document.getElementById('modal_loves_' + idx).innerText = x;
     }
 
 
+    $(document).ready(function(){
+        $("#hides").hide();
+    });
 </script>

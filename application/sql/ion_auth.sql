@@ -121,3 +121,11 @@ CREATE TABLE `follow` (
   `me` int(11) unsigned NOT NULL,
   `him` int(11) unsigned NOT NULL,
 ) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
+
+#
+# Table structure for table 'user_loves'
+#
+CREATE TABLE `user_loves` (
+  `user_id` int(11) NOT NULL,
+  `photo_id` INT NOT NULL
+  ) ENGINE = InnoDB;

@@ -19,6 +19,10 @@ class Photos extends CI_Controller{
         // Getting trends from database
         $data['photos'] = $this->photo_model->get_best_photos();
 
+        // Getting user's data
+        $data['user'] = $this->ion_auth->user()->row();
+
+
         // Loading trends view
         $data['body'] = $this->load->view('trends', $data, true);
 
