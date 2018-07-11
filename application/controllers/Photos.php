@@ -22,6 +22,17 @@ class Photos extends CI_Controller{
         // Getting user's data
         $data['user'] = $this->ion_auth->user()->row();
 
+        // Getting status of the photos (loved or not by this user
+        if ($this->user_logged_in) {
+            $loved = $this->photo_model->get_loved_by($data['user']->id);
+            $photos = array();
+            foreach ($data['photos'] as $photo) {
+                $photos[$photo->id] = binary_search($loved,$photo->id);
+            }
+        }
+        $data['loved'] = $photos;
+
+
 
         // Loading trends view
         $data['body'] = $this->load->view('trends', $data, true);

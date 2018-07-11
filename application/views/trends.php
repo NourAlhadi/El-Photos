@@ -19,7 +19,11 @@
                         <i id="loves_<?php echo $photo->id; ?>" class="fa fa-2x fa-heart" style="color: indianred"> <?php echo $photo->loves; ?></i> &nbsp;&nbsp;
                         <br /><br />
                         <?php if($user_logged_in): ?>
-                            <button onclick="addLove(<?php echo $photo->id . ',' . $user->id;?>)" class="btn btn-danger">Love it!!</button>
+                            <?php if(!$loved[$photo->id]): ?>
+                                <button id="addLove<?php echo $photo->id; ?>" onclick="addLove(<?php echo $photo->id . ',' . $user->id;?>)" class="btn btn-danger">Love it!!</button>
+                            <?php else: ?>
+                                <button id="removeLove<?php echo $photo->id; ?>" onclick="removeLove(<?php echo $photo->id . ',' . $user->id;?>)" class="btn btn-info">No Love!!</button>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -37,7 +41,11 @@
                         <i id="modal_views_<?php echo $photo->id; ?>" class="fa fa-eye" style="color: royalblue"> <?php echo $photo->views; ?></i> &nbsp;&nbsp;
                         <i id="modal_loves_<?php echo $photo->id; ?>" class="fa fa-heart" style="color: indianred"> <?php echo $photo->loves; ?></i> &nbsp;&nbsp;
                         <?php if($user_logged_in): ?>
-                            <button onclick="addLove(<?php echo $photo->id . ',' . $user->id;?>)" class="btn btn-sm btn-samll btn-danger">Love it!!</button>
+                            <?php if(!$loved[$photo->id]): ?>
+                                <button id="addLoveMini<?php echo $photo->id; ?>" onclick="addLove(<?php echo $photo->id . ',' . $user->id;?>)" class="btn btn-sm btn-samll btn-danger">Love it!!</button>
+                            <?php else: ?>
+                                <button id="removeLoveMini<?php echo $photo->id; ?>" onclick="removeLove(<?php echo $photo->id . ',' . $user->id;?>)" class="btn btn-sm btn-samll btn-info">No Love!!</button>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -190,23 +198,77 @@
         }, 5000);
     }
 
+
+    let baseAdd = [];//false;
+    let baseRem = [];//false;
+    let calls = [];//0;
+
+    for (let i= 0; i <= <?php echo sizeof($photos); ?> ; i++){
+        baseAdd.push(false);
+        baseRem.push(false);
+        calls.push(false);
+    }
+
+    console.log(calls);
+
     function addLove(idx,user) {
         lock = true;
+
+
+        if (baseAdd[idx] === false && baseRem[idx] === false) baseAdd[idx] = true;
+
+        if (baseAdd[idx]) changeToRemove(idx);
+
+        if (baseAdd[idx]){
+            if (calls[idx] % 2 === 0) {
+                calls[idx]++;
+            }else {
+                removeLove(idx, user);
+                return;
+            }
+        }else{
+            if (calls[idx] % 2 !== 0) {
+                calls[idx]++;
+            }else {
+                removeLove(idx, user);
+                return;
+            }
+        }
+
         jQuery.ajax({
             type: "POST",
             url: "<?php echo base_url(); ?>/ajax/add_love",
             dataType: 'json',
             data: {photo_id: idx, user_id: user},
-            success: function(res) {
-                console.log(res.status);
-                if (res.status === "success"){
-                    incLoves(idx);
-                }else{
-                    showNoLove();
-                }
+            complete: function(res) {
+                incLoves(idx);
             }
 
         });
+    }
+
+    function changeToRemove(idx){
+        let btn = document.getElementById("addLove"+idx);
+        let mbtn = document.getElementById("addLoveMini"+idx);
+
+        if (calls[idx] % 2 === 0) {
+            btn.classList.remove("btn-danger");
+            btn.classList.add("btn-info");
+            btn.innerText = "No Love!!";
+
+            mbtn.classList.remove("btn-danger");
+            mbtn.classList.add("btn-info");
+            mbtn.innerText = "No Love!!";
+        }else{
+            btn.classList.remove("btn-info");
+            btn.classList.add("btn-danger");
+            btn.innerText = "Love it!!";
+
+            mbtn.classList.remove("btn-info");
+            mbtn.classList.add("btn-danger");
+            mbtn.innerText = "Love it!!";
+        }
+
     }
 
     function incLoves(idx){
@@ -216,6 +278,72 @@
         document.getElementById('modal_loves_' + idx).innerText = x;
     }
 
+
+    function removeLove(idx,user) {
+        lock = true;
+
+        if (baseAdd[idx] === false && baseRem[idx] === false) baseRem[idx] = true;
+
+        if (baseRem[idx]) changeToAdd(idx);
+
+        if (baseRem[idx]){
+            if (calls[idx] % 2 === 0) {
+                calls[idx]++;
+            }else {
+                addLove(idx, user);
+                return;
+            }
+        }else{
+            if (calls[idx] % 2 !== 0) {
+                calls[idx]++;
+            }else {
+                addLove(idx, user);
+                return;
+            }
+        }
+
+
+        jQuery.ajax({
+            type: "POST",
+            url: "<?php echo base_url(); ?>/ajax/remove_love",
+            dataType: 'json',
+            data: {photo_id: idx, user_id: user},
+            complete: function(res) {
+                decLoves(idx);
+            }
+
+        });
+    }
+
+    function changeToAdd(idx){
+        let btn = document.getElementById("removeLove"+idx);
+        let mbtn = document.getElementById("removeLoveMini"+idx);
+
+        if (calls[idx] % 2 !== 0) {
+            btn.classList.remove("btn-danger");
+            btn.classList.add("btn-info");
+            btn.innerText = "No Love!!";
+
+            mbtn.classList.remove("btn-danger");
+            mbtn.classList.add("btn-info");
+            mbtn.innerText = "No Love!!";
+        }else{
+            btn.classList.remove("btn-info");
+            btn.classList.add("btn-danger");
+            btn.innerText = "Love it!!";
+
+            mbtn.classList.remove("btn-info");
+            mbtn.classList.add("btn-danger");
+            mbtn.innerText = "Love it!!";
+        }
+    }
+
+    function decLoves(idx){
+        let x = document.getElementById('loves_' + idx).innerText;
+        x--;
+        document.getElementById('loves_' + idx).innerText = x;
+        document.getElementById('modal_loves_' + idx).innerText = x;
+    }
 
     $(document).ready(function(){
         $("#hides").hide();

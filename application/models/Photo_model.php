@@ -83,13 +83,8 @@ class Photo_model extends CI_Model{
      *
      * @param $user_id, the user id
      * @param $photo_id, the photo id
-     * @return bool, the result of adding operation
      */
     public function add_love($user_id,$photo_id){
-        $this->db->where('user_id',$user_id)->where('photo_id',$photo_id);
-        $query = $this->db->get('user_loves');
-        if ($query->num_rows() != 0) return false;
-
         $data = array(
             "user_id" => $user_id,
             "photo_id" => $photo_id
@@ -109,5 +104,31 @@ class Photo_model extends CI_Model{
         $this->db->update('photo');
     }
 
+    public function remove_love($user_id,$photo_id){
+        $this->db->where('user_id',$user_id)->where('photo_id',$photo_id);
+        $this->db->delete('user_loves');
+
+
+        $this->db->where('id',$photo_id);
+        $this->db->select('loves');
+        $loves = $this->db->get('photo')->row();
+        $loves = $loves->loves;
+
+        $loves = $loves - 1;
+
+        $this->db->set('loves', $loves);
+        $this->db->where('id', $photo_id);
+        $this->db->update('photo');
+    }
+
+    public function get_loved_by($user_id){
+        $arr = $this->db->where('user_id',$user_id)->get('user_loves')->result();
+        $photos = array();
+        foreach ($arr as $element){
+            array_push($photos,$element->photo_id);
+        }
+        sort($photos);
+        return $photos;
+    }
 
 }
