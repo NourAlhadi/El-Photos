@@ -33,6 +33,27 @@ class Photos extends CI_Controller{
         $this->load->view('base', $data);
     }
 
+    public function community(){
+        // Checking if user is logged in (important for navbar)
+        $this->user_logged_in = (bool)$this->ion_auth->logged_in();
+        $data["user_logged_in"] = $this->user_logged_in;
+
+        // Getting user's data
+        $data['user'] = $this->ion_auth->user()->row();
+
+        // Getting community photos from database
+        $data['photos'] = $this->photo_model->get_community_photos($data['user']->id);
+
+        // Loading trends view
+        $data['body'] = $this->load->view('trends', $data, true);
+
+        // Setting trends as current active page in navbar
+        $data['cact'] = "active";
+
+        // Rendering the basic view with trends template
+        $this->load->view('base', $data);
+    }
+
     /**
      * The upload action is the action which will help users upload photos
      */

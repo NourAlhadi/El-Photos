@@ -142,7 +142,7 @@
                 <a class="nav-link <?php if (isset($tact)) echo "active" ?>" href="<?php echo base_url("") ?>">Trends</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <?php if (isset($mact)) echo "active" ?>" href="#">By Community</a>
+                <a class="nav-link <?php if (isset($cact)) echo "active" ?>" href="<?php echo base_url("") ?>photos/community">By Community</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?php if (isset($uact)) echo "active" ?>" href="<?php echo base_url(); ?>photos/upload">Upload</a>
