@@ -14,7 +14,8 @@
             min-height: calc(100vh - 50px);
         }
         .footer {
-            height: 50px;
+            height: auto;
+            width: 100%;
         }
 
         .main-top {
@@ -126,12 +127,12 @@
 
 <div class="jumbotron text-center main-top" style="margin-bottom:0">
     <div id="main-image"></div>
-    <h1>El-Photos By Nour Alhadi</h1>
+    <h1>El-Photos<sub> <sub>Beta</sub></sub> By Nour Alhadi</h1>
     <h4>Make your photos charm!!</h4>
 </div>
 
 <nav class="navbar navbar-expand-sm bg-warning navbar-light sticky-top">
-    <a class="navbar-brand" href="<?php echo base_url("") ?>">El-Photos</a>
+    <a class="navbar-brand" href="<?php echo base_url("") ?>">El-Photos<sub> Beta</sub> </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
     </button>

@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row">
         <?php foreach ($photos as $photo): ?>
-            <div onclick="openModal(<?php echo $photo->id; ?>);" class="col-4" style="margin-bottom: 20px">
+            <div onclick="openModal(<?php echo $photo->id; ?>);" class="col-12 col-sm-6 col-lg-4" style="margin-bottom: 20px">
                 <div class="card text-center">
                     <!-- Heading -->
                     <div class="card-body">
@@ -31,6 +31,9 @@
                     </div>
                     <div class="caption-container">
                         <p id="caption"><?php echo $photo->post; ?></p>
+                        <i class=" fa fa-eye" style="color: royalblue"> <?php echo $photo->views; ?></i> &nbsp;&nbsp;
+                        <i class=" fa fa-heart" style="color: indianred"> <?php echo $photo->loves; ?></i> &nbsp;&nbsp;
+                        <button class="btn btn-sm btn-small btn-danger">Love it!!</button>
                     </div>
                 </div>
             </div>
@@ -46,7 +49,7 @@
         display: none;
         position: fixed;
         z-index: 10001;
-        padding-top: 100px;
+        padding-top: 50px;
         left: 0;
         top: 0;
         width: 100%;
@@ -58,11 +61,23 @@
     /* Modal Content */
     .modal-content {
         position: relative;
-        background-color: #fefefe;
+        background-color: #9e9e9e;
         margin: auto;
         padding: 0;
         width: 60%;
         max-width: 1200px;
+    }
+
+    @media screen and (max-width: 480px){
+        .modal-content {
+            position: relative;
+            background-color: #9e9e9e;
+            margin: auto;
+            padding: 0;
+            width: 90%;
+            height: auto;
+            max-width: 1200px;
+        }
     }
 
     /* The Close Button */
@@ -100,9 +115,10 @@
 
     .caption-container {
         text-align: center;
-        background-color: white;
-        padding: 2px 16px;
+        background-color: rgba(150,150,150,.2);
+        padding: 16px;
         color: black;
+
     }
 
     /**********************************/

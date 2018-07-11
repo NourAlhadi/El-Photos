@@ -14,28 +14,29 @@
     <h5>Email: <?php echo $user->email; ?></h5><hr>
     <h5>Company: <?php echo $user->company; ?></h5><hr>
     <h5>Phone: <?php echo $user->phone; ?></h5><hr>
+    <?php if ($user_logged_in): ?>
+        <?php if (isset($strange) && $strange == true): ?>
 
-    <?php if (isset($strange) && $strange == true): ?>
+            <?php if($friend == false): ?>
+                <?php echo anchor('profile/add/'. $user->id ,'<input type="button" value="Add to Community">','') ?>
+            <?php else: ?>
+                <?php echo anchor('profile/remove/'. $user->id ,'<input type="button" value="Remove from Community">','') ?>
+            <?php endif; ?>
 
-        <?php if($friend == false): ?>
-            <?php echo anchor('profile/add/'. $user->id ,'<input type="button" value="Add to Community">','') ?>
         <?php else: ?>
-            <?php echo anchor('profile/remove/'. $user->id ,'<input type="button" value="Remove from Community">','') ?>
+
+            <?php echo anchor('profile/change','<input type="button" value="Change Profile">','') ?>
+            <br />
+            <br />
+
+            <?php echo anchor('profile/change_avatar','<input type="button" value="Change Avatar">','') ?>
+            <br />
+            <br />
+
+
+            <?php echo anchor('auth/change_password','<input type="button" value="Change Password">','') ?>
+
         <?php endif; ?>
-
-    <?php else: ?>
-
-        <?php echo anchor('profile/change','<input type="button" value="Change Profile">','') ?>
-        <br />
-        <br />
-
-        <?php echo anchor('profile/change_avatar','<input type="button" value="Change Avatar">','') ?>
-        <br />
-        <br />
-
-
-        <?php echo anchor('auth/change_password','<input type="button" value="Change Password">','') ?>
-
     <?php endif; ?>
 
 </div>
