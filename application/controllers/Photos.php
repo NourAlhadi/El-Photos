@@ -1,6 +1,6 @@
 <?php
 
-// TODO: Try to make every redirection to login reversable
+// TODO: Try to make every redirection to login reversible
 
 /**
  * Class Photos This is the main controller of anything related to photos!!
@@ -23,9 +23,9 @@ class Photos extends CI_Controller{
         $data['user'] = $this->ion_auth->user()->row();
 
         // Getting status of the photos (loved or not by this user
+        $photos = array();
         if ($this->user_logged_in) {
             $loved = $this->photo_model->get_loved_by($data['user']->id);
-            $photos = array();
             foreach ($data['photos'] as $photo) {
                 $photos[$photo->id] = binary_search($loved,$photo->id);
             }
@@ -49,11 +49,31 @@ class Photos extends CI_Controller{
         $this->user_logged_in = (bool)$this->ion_auth->logged_in();
         $data["user_logged_in"] = $this->user_logged_in;
 
+        // If not logged in user --> he has no community
+        // Redirect to login
+        if (!$this->user_logged_in){
+            $_SESSION['redirect'] = '/photos/community';
+            $this->session->mark_as_flash('redirect');
+
+            redirect("auth/login");
+        }
+
         // Getting user's data
         $data['user'] = $this->ion_auth->user()->row();
 
         // Getting community photos from database
         $data['photos'] = $this->photo_model->get_community_photos($data['user']->id);
+
+
+        // Getting status of the photos (loved or not by this user
+        $photos = array();
+        if ($this->user_logged_in) {
+            $loved = $this->photo_model->get_loved_by($data['user']->id);
+            foreach ($data['photos'] as $photo) {
+                $photos[$photo->id] = binary_search($loved,$photo->id);
+            }
+        }
+        $data['loved'] = $photos;
 
         // Loading trends view
         $data['body'] = $this->load->view('trends', $data, true);
@@ -75,6 +95,9 @@ class Photos extends CI_Controller{
         $data["user_logged_in"] = $this->user_logged_in;
         $data["uact"] = "active";
         if (!$this->user_logged_in){
+            $_SESSION['redirect'] = '/photos/upload';
+            $this->session->mark_as_flash('redirect');
+
             redirect('auth/login');
         }
 

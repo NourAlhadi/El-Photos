@@ -20,7 +20,8 @@
         <?php echo lang('login_remember_label', 'remember');?>
         <?php echo form_checkbox('remember', '1', FALSE, 'id="remember"');?>
       </p>
-
+      <?php if (!isset($_SESSION['redirect'])) $_SESSION['redirect'] = NULL; ?>
+      <input type="hidden" name="redirect" value="<?php echo $_SESSION['redirect']; ?>">
 
       <p><?php echo form_submit('submit', lang('login_submit_btn'));?></p>
 

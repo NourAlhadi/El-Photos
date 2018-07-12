@@ -15,6 +15,9 @@ class Profile extends CI_Controller {
         $this->user_logged_in = (bool)$this->ion_auth->logged_in();
         $data["user_logged_in"] = $this->user_logged_in;
         if (!$this->user_logged_in){
+            $_SESSION['redirect'] = '/profile';
+            $this->session->mark_as_flash('redirect');
+
             redirect('auth/login');
         }
 
@@ -44,7 +47,7 @@ class Profile extends CI_Controller {
         }
 
         // Getting requested user's data, or redirect to index if user not found
-        // TODO: show error message insead of redirect
+        // TODO: show error message instead of redirect
         $request = $this->ion_auth->user($id)->row();
         if (is_null($request)){
             redirect("/");
@@ -76,6 +79,9 @@ class Profile extends CI_Controller {
         $this->user_logged_in = (bool)$this->ion_auth->logged_in();
         $data["user_logged_in"] = $this->user_logged_in;
         if (!$this->user_logged_in){
+            $_SESSION['redirect'] = '/profile/user/' . $user_id;
+            $this->session->mark_as_flash('redirect');
+
             redirect('auth/login');
         }
 
@@ -98,6 +104,9 @@ class Profile extends CI_Controller {
         $this->user_logged_in = (bool)$this->ion_auth->logged_in();
         $data["user_logged_in"] = $this->user_logged_in;
         if (!$this->user_logged_in){
+            $_SESSION['redirect'] = '/profile/user/'.$user_id;
+            $this->session->mark_as_flash('redirect');
+
             redirect('auth/login');
         }
 
@@ -118,6 +127,9 @@ class Profile extends CI_Controller {
         $this->user_logged_in = (bool)$this->ion_auth->logged_in();
         $data["user_logged_in"] = $this->user_logged_in;
         if (!$this->user_logged_in){
+            $_SESSION['redirect'] = '/profile';
+            $this->session->mark_as_flash('redirect');
+
             redirect('auth/login');
         }
 
@@ -163,6 +175,9 @@ class Profile extends CI_Controller {
         $this->user_logged_in = (bool)$this->ion_auth->logged_in();
         $data["user_logged_in"] = $this->user_logged_in;
         if (!$this->user_logged_in){
+            $_SESSION['redirect'] = '/profile';
+            $this->session->mark_as_flash('redirect');
+
             redirect('auth/login');
         }
 
@@ -185,6 +200,9 @@ class Profile extends CI_Controller {
         $this->user_logged_in = (bool)$this->ion_auth->logged_in();
         $data["user_logged_in"] = $this->user_logged_in;
         if (!$this->user_logged_in){
+            $_SESSION['redirect'] = '/profile/change';
+            $this->session->mark_as_flash('redirect');
+
             redirect('auth/login');
         }
 
