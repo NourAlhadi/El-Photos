@@ -2,6 +2,11 @@
     <?php
     echo isset($_SESSION['auth_message']) ? $_SESSION['auth_message'] : FALSE;
     ?>
+
+    <?php if (isset($_SESSION['form_error'])): ?>
+        <div class="alert alert-danger"><?php echo $_SESSION['form_error'];?></div>
+    <?php endif; ?>
+
     <h1>Register</h1>
     <?php
     echo form_open();

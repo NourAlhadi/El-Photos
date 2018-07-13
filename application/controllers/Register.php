@@ -55,8 +55,8 @@ class Register extends CI_Controller{
             }
             else {
                 // Setup a flash message
-                $_SESSION['auth_message'] = $this->ion_auth->errors();
-                $this->session->mark_as_flash('auth_message');
+                $_SESSION['form_error'] = 'Can not complete registration';
+                $this->session->mark_as_flash('form_error');
 
                 // Reload the view
                 redirect('register');

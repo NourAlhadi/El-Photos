@@ -1,13 +1,13 @@
 <div class="form-style-6">
-    <h1><?php echo lang('login_heading');?></h1>
-    <p><?php echo lang('login_subheading');?></p>
+    <h1>Login</h1>
 
-    <div id="infoMessage"><?php echo $message;?></div>
-
+    <?php if(isset($message)): ?>
+        <div class="alert alert-danger" id="infoMessage"><?php echo $message;?></div>
+    <?php endif; ?>
     <?php echo form_open("auth/login");?>
 
       <p>
-        <?php echo lang('login_identity_label', 'identity');?>
+        <label for="identity">Username: </label>
         <?php echo form_input($identity);?>
       </p>
 

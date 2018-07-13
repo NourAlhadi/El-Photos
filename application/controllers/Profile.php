@@ -146,6 +146,10 @@ class Profile extends CI_Controller {
         if ( ! $this->upload->do_upload('userfile')) {
             // DONOT REMOVE THIS VARIABLE, NEEDED FOR DEBUGGING
             //$error = array('error' => $this->upload->display_errors());
+            $_SESSION['form_error'] = 'Avatar is not uploaded due to following: ' . $this->upload->display_errors();
+
+            if (strpos($this->upload->display_errors(),'did not select') !== false) $_SESSION['form_error'] = null;
+            $this->session->mark_as_flash('form_errors');
 
             // Reload the view
             $data['body'] = $this->load->view('change_avatar', $data, true);
@@ -215,6 +219,7 @@ class Profile extends CI_Controller {
         $this->form_validation->set_rules('last_name', 'Last name', 'trim');
         $this->form_validation->set_rules('company', 'Company', 'trim');
         $this->form_validation->set_rules('phone', 'Phone', 'trim');
+        $this->form_validation->set_rules('password', 'Password', 'trim');
 
         // Checking if form is submitted
         if ($this->form_validation->run() === FALSE) {
@@ -233,9 +238,16 @@ class Profile extends CI_Controller {
                 'phone' => $this->input->post('phone')
             );
 
-            // Checking if new password is more than 6 chars.
-            if (strlen($this->input->post('password')) >= 6)
-                $new_data['password'] = $this->input->post('password');
+            // Checking if password is correct.
+            $password = $this->input->post('password');
+            $password_matches = $this->ion_auth->hash_password_db($this->ion_auth->user()->row()->id, $password);
+            if ($password_matches != 1){
+                $_SESSION['form_error'] = 'The password you entered is not correct!!';
+                $this->session->mark_as_flash('form_error');
+
+                redirect('profile/change','refresh');
+                return;
+            }
 
             // Saving data to database
             $this->ion_auth->update($user->id, $data);

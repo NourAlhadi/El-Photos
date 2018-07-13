@@ -1,4 +1,9 @@
 <div class="form-style-6">
+
+    <?php if (isset($_SESSION['form_error'])): ?>
+        <div class="alert alert-danger"><?php echo $_SESSION['form_error'];?></div>
+    <?php endif; ?>
+
     <form method="post" action="change" enctype="multipart/form-data">
         <p>
             <label>First Name: </label>
@@ -21,13 +26,8 @@
         </p>
 
         <p>
-            <label>Password: </label>
-            <?php echo form_input('password');?>
-        </p>
-
-        <p>
-            <label>Confirm Password: </label>
-            <?php echo form_input('password_confirm');?>
+            <label for="pass">Password: </label>
+            <input id="pass" type="password" name="password">
         </p>
 
         <?php echo form_hidden('id');?>
